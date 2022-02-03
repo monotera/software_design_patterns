@@ -1,17 +1,19 @@
 import React, { useState } from "react";
 import {Button, Card, Form} from "react-bootstrap";
 
-// const {useState} = React;
-
 const RecordForm = () => {
     const booking = {
-        "id":"",
-        "names":"",
-        "lastNames":"",
-        "age":0,
-        "date":"",
-        "time":""
-    }
+        "user" : {
+            "id":"",
+            "names":"",
+            "lastNames":"",
+            "age":0
+        },
+        "appointment" : {
+            "date":"",
+            "time":""
+        }
+    };
 
     const [id, setId] = useState(1000875632);
     const [names, setNames] = useState("Nombre1 Nombre2")
@@ -26,12 +28,12 @@ const RecordForm = () => {
     const handleDateChange = (e) => setDate(e.target.value);
     const handleTimeChange = (e) => setTime(e.target.value);
 
-    booking.id = id;
-    booking.names = names;
-    booking.lastNames = lastNames;
-    booking.age = age;
-    booking.date = date;
-    booking.time = time;
+    booking.user.id = id;
+    booking.user.names = names;
+    booking.user.lastNames = lastNames;
+    booking.user.age = age;
+    booking.appointment.date = date;
+    booking.appointment.time = time;
 
     return (
         <div className="App">
