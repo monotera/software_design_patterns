@@ -1,6 +1,6 @@
 package com.appointment_scheduling.controller;
 
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -10,10 +10,9 @@ import com.appointment_scheduling.model.Appointment;
 import com.appointment_scheduling.model.entities.AppointmentCreationRequest;
 import com.appointment_scheduling.model.entities.User;
 import java.text.SimpleDateFormat;
-import java.io.FileWriter;
 
 import com.google.gson.Gson;
-import java.io.File;
+import org.apache.tomcat.util.json.JSONParser;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(value = "/")
 public class AppointmentController {
+
 
 
    /* public boolean createDirectrory(){
@@ -96,9 +96,30 @@ public class AppointmentController {
     }
 
     @GetMapping("/appointment")
-    public ResponseEntity<ArrayList<Appointment>> fetch_appointments_by_date(@RequestParam String date) {
+    public ResponseEntity<ArrayList<Appointment>> fetch_appointments_by_date(@RequestParam String date) throws IOException {
         // TODO: funcion que retorna las citas de una fecha (ArrayList<Appointment>)
-        // Cambiar el primer null por lo que debe retornar
-        return new ResponseEntity<>(null, null, HttpStatus.OK);
+        ArrayList<AppointmentCreationRequest> appointmentsOfADay= new ArrayList<AppointmentCreationRequest>();
+        String dateDirectory="./"+date;
+        File directory = new File(dateDirectory);
+        if(!directory.exists()){
+            return new ResponseEntity<>(null, null, HttpStatus.OK);
+        }else{
+            File folder=new File(dateDirectory);
+            for (File file : folder.listFiles()) {
+                String json="";
+                BufferedReader br= new BufferedReader(new FileReader(file+".json"));
+                String linea;
+                while((linea=br.readLine())!=null){
+                    json+=linea;
+                }
+                br.close();
+                Gson gson=new Gson();
+                AppointmentCreationRequest appointment=gson.fromJson(json,AppointmentCreationRequest.class);
+                appointmentsOfADay.add(appointment);
+            }
+            // Cambiar el primer null por lo que debe retornar
+            //ARREGLAR LO QUE SE DEBE RETORNAR
+            return new ResponseEntity<>(null, null, HttpStatus.OK);
+        }
     }
 }
