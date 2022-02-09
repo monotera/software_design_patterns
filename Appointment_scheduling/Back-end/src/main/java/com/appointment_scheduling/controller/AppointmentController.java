@@ -11,8 +11,20 @@ import com.appointment_scheduling.model.entities.AppointmentCreationRequest;
 import com.appointment_scheduling.model.entities.User;
 import java.text.SimpleDateFormat;
 
+
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.lang.reflect.Type;
+import com.google.gson.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import net.minidev.json.JSONObject;
 import org.apache.tomcat.util.json.JSONParser;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -91,11 +103,12 @@ public class AppointmentController {
         return new ResponseEntity(dateName, null, HttpStatus.OK);
     }
 
-    @GetMapping("/appointment")
+    /*@GetMapping("/appointment")
     public ResponseEntity<ArrayList<Appointment>> fetch_appointments_by_date(@RequestParam String date) throws IOException {
         // TODO: funcion que retorna las citas de una fecha (ArrayList<Appointment>)
-        ArrayList<AppointmentCreationRequest> appointmentsOfADay= new ArrayList<AppointmentCreationRequest>();
-        String dateDirectory="./"+date;
+        ArrayList<Appointment> appointmentsOfADay= new ArrayList<Appointment>();
+        String dateDirectory=date(date);
+        dateDirectory="./"+dateDirectory;
         File directory = new File(dateDirectory);
         if(!directory.exists()){
             return new ResponseEntity<>(null, null, HttpStatus.OK);
@@ -110,12 +123,37 @@ public class AppointmentController {
                 }
                 br.close();
                 Gson gson=new Gson();
-                AppointmentCreationRequest appointment=gson.fromJson(json,AppointmentCreationRequest.class);
+                Appointment appointment=gson.fromJson(json,Appointment.class);
                 appointmentsOfADay.add(appointment);
             }
             // Cambiar el primer null por lo que debe retornar
             //ARREGLAR LO QUE SE DEBE RETORNAR
+            return new ResponseEntity<>(appointmentsOfADay, null, HttpStatus.OK);
+        }
+    }*/
+
+    @GetMapping("/appointment")
+    public ResponseEntity<ArrayList<Appointment>> fetch_appointments_by_date(@RequestParam String date) throws IOException {
+        // TODO: funcion que retorna las citas de una fecha (ArrayList<Appointment>)
+        //ArrayList<Appointment> appointmentsOfADay= new ArrayList<Appointment>(){};
+        String dateDirectory=date(date);
+        dateDirectory="./"+dateDirectory;
+        File directory = new File(dateDirectory);
+        JsonReader dataAppointment;
+        Gson g = new Gson();
+        Type appointmentListType = new TypeToken<ArrayList<Appointment>>() {
+        }.getType();
+        ArrayList<Appointment>appointmentsOfADay = null;
+        if(!directory.exists()){
             return new ResponseEntity<>(null, null, HttpStatus.OK);
+        }else{
+            File folder=new File(dateDirectory);
+            for (File file : folder.listFiles()) {
+                dataAppointment=new JsonReader((new FileReader(file+".json")));
+                appointmentsOfADay=g.fromJson(dataAppointment,appointmentListType);
+            }
+            return new ResponseEntity<>(appointmentsOfADay, null, HttpStatus.OK);
         }
     }
+
 }
