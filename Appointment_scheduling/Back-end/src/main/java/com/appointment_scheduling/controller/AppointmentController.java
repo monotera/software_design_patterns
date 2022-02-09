@@ -12,6 +12,7 @@ import com.appointment_scheduling.model.entities.User;
 import java.text.SimpleDateFormat;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.apache.tomcat.util.json.JSONParser;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -61,11 +62,12 @@ public class AppointmentController {
 
     public void saveJson(String appointment, String fileName, String directory){
         try {
-            FileWriter file = new FileWriter(directory + "./"+fileName);
-            file.write(appointment);
-            file.flush();
-            file.close();
-
+            Writer writer = new FileWriter(fileName +".json");
+            writer.write(appointment);
+            Gson gson = new GsonBuilder().create();
+            gson.toJson(directory,writer);
+            writer.flush();
+            writer.close();
         } catch (IOException e) {
             e.fillInStackTrace();
         }
@@ -73,26 +75,20 @@ public class AppointmentController {
 
 
     @PostMapping("/appointment")
-    public ResponseEntity<Boolean> create_appointment(@RequestBody AppointmentCreationRequest newAppointment) {
-        // TODO: funcion para crear cita, se debe retornar un booleano
-        // cambiar el primer null por lo que debe de retornar
+    public ResponseEntity<Boolean> create_appointment(@RequestBody Appointment newAppointment) {
         SimpleDateFormat format = new SimpleDateFormat("\"yyyy/MM/dd\"");
-        String dateName;
+        String dateName = format.format(newAppointment.getDate().getTime());
         String directoryName;
-        User user = newAppointment.getUser();
-        Appointment appointment = newAppointment.getAppointment();
         Gson new_appointment = new Gson();
-        String appointmentJson = new_appointment.toJson(appointment);
-        dateName = format.format(appointment.getDate());
+        String appointmentJson = new_appointment.toJson(newAppointment);
         directoryName = date(dateName); //20220201
-        String filename = appointment.getUser().getId();
+        String filename = newAppointment.getUser().getId();
         if(existsDirectory("./"+directoryName)){
             saveJson(appointmentJson, filename, "./"+directoryName);
             }else{
             saveJson(appointmentJson,filename, "./"+directoryName);
         }
-
-        return new ResponseEntity<>(null, null, HttpStatus.OK);
+        return new ResponseEntity(dateName, null, HttpStatus.OK);
     }
 
     @GetMapping("/appointment")
