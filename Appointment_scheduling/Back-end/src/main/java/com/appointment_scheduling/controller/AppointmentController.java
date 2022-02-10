@@ -1,8 +1,10 @@
 package com.appointment_scheduling.controller;
 
 import java.io.*;
+import java.nio.file.FileStore;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
@@ -18,9 +20,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.lang.reflect.Type;
+
+import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -73,13 +75,16 @@ public class AppointmentController {
     }
 
     public void saveJson(String appointment, String fileName, String directory){
-        try {
-            Writer writer = new FileWriter(fileName +".json");
-            writer.write(appointment);
-            Gson gson = new GsonBuilder().create();
-            gson.toJson(directory,writer);
-            writer.flush();
-            writer.close();
+            try {
+                String fullPath = directory + "/"+fileName + ".json";
+                String fileJson =  fileName + ".json";
+                File file = new File(fullPath);
+                OutputStream out = new FileOutputStream(file);
+                Writer writer = new FileWriter(fullPath);
+                writer.write(appointment);
+                out.close();
+                 writer.flush();
+                 writer.close();
         } catch (IOException e) {
             e.fillInStackTrace();
         }
@@ -95,12 +100,12 @@ public class AppointmentController {
         String appointmentJson = new_appointment.toJson(newAppointment);
         directoryName = date(dateName); //20220201
         String filename = newAppointment.getUser().getId();
-        if(existsDirectory("./"+directoryName)){
-            saveJson(appointmentJson, filename, "./"+directoryName);
-            }else{
-            saveJson(appointmentJson,filename, "./"+directoryName);
-        }
-        return new ResponseEntity(dateName, null, HttpStatus.OK);
+        if(existsDirectory("src/main/java/com/appointment_scheduling/controller/"+directoryName)){
+            saveJson(appointmentJson, filename, "src/main/java/com/appointment_scheduling/controller/"+directoryName);
+          }else{
+           saveJson(appointmentJson,filename, "src/main/java/com/appointment_scheduling/controller/"+directoryName);
+           }
+        return new ResponseEntity(appointmentJson, null, HttpStatus.OK);
     }
 
     /*@GetMapping("/appointment")
