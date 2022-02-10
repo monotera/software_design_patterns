@@ -8,6 +8,7 @@ public class AppointmentSchedulingApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(AppointmentSchedulingApplication.class, args);
+
 	}
 
 }
