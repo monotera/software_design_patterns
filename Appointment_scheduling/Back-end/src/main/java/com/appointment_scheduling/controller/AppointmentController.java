@@ -32,89 +32,16 @@ public class AppointmentController {
 
     @PostMapping("/appointment")
     public ResponseEntity<Appointment> create_appointment(@RequestBody Appointment newAppointment) {
-
-        persister.write_data(newAppointment);
-        // TODO: funcion para crear cita, se debe retornar un booleano
-        // cambiar el primer null por lo que debe de retornar
-        /*
-         * SimpleDateFormat format = new SimpleDateFormat("\"yyyy/MM/dd\"");
-         * String dateName;
-         * String directoryName;
-         * User user = newAppointment.getUser();
-         * Appointment appointment = newAppointment.getAppointment();
-         * Gson new_appointment = new Gson();
-         * String appointmentJson = new_appointment.toJson(appointment);
-         * dateName = format.format(appointment.getDate());
-         * directoryName = date(dateName); //20220201
-         * String filename = appointment.getUser().getId();
-         * if(existsDirectory("./"+directoryName)){
-         * saveJson(appointmentJson, filename, "./"+directoryName);
-         * }else{
-         * saveJson(appointmentJson,filename, "./"+directoryName);
-         * }
-         */
+        Boolean valid = persister.write_data(newAppointment);
+        if (!valid)
+            return new ResponseEntity<>(null, null, HttpStatus.INTERNAL_SERVER_ERROR);
         return new ResponseEntity<>(newAppointment, null, HttpStatus.OK);
     }
 
     @GetMapping("/appointment")
-    public ResponseEntity<ArrayList<Appointment>> fetch_appointments_by_date(@RequestParam String date)
-            throws IOException {
-        // TODO: funcion que retorna las citas de una fecha (ArrayList<Appointment>)
-        /*
-         * ArrayList<AppointmentCreationRequest> appointmentsOfADay = new
-         * ArrayList<AppointmentCreationRequest>();
-         * String dateDirectory = "./" + date;
-         * File directory = new File(dateDirectory);
-         * if (!directory.exists()) {
-         * return new ResponseEntity<>(null, null, HttpStatus.OK);
-         * } else {
-         * File folder = new File(dateDirectory);
-         * for (File file : folder.listFiles()) {
-         * String json = "";
-         * BufferedReader br = new BufferedReader(new FileReader(file + ".json"));
-         * String linea;
-         * while ((linea = br.readLine()) != null) {
-         * json += linea;
-         * }
-         * br.close();
-         * Gson gson = new Gson();
-         * AppointmentCreationRequest appointment = gson.fromJson(json,
-         * AppointmentCreationRequest.class);
-         * appointmentsOfADay.add(appointment);
-         * }
-         */
-        // Cambiar el primer null por lo que debe retornar
-        // ARREGLAR LO QUE SE DEBE RETORNAR
-        return new ResponseEntity<>(null, null, HttpStatus.OK);
+    public ResponseEntity<ArrayList<Appointment>> fetch_appointments_by_date(@RequestParam String date) {
+        ArrayList<Appointment> response = persister.retrieveData(date);
+        return new ResponseEntity<>(response, null, HttpStatus.OK);
     }
 
-    public boolean existsDirectory(String path) {
-        File directory = new File(path);
-        if (!directory.exists()) {
-            return directory.mkdir();
-        } else {
-            return false;
-        }
-    }
-
-    public String date(String date) {
-        String div[] = date.split("/");
-        String year = div[0];
-        String month = div[1];
-        String day = div[2];
-        String directoryName = year + month + day;
-        return directoryName;
-    }
-
-    public void saveJson(String appointment, String fileName, String directory) {
-        try {
-            FileWriter file = new FileWriter(directory + "./" + fileName);
-            file.write(appointment);
-            file.flush();
-            file.close();
-
-        } catch (IOException e) {
-            e.fillInStackTrace();
-        }
-    }
 }

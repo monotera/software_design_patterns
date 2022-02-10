@@ -1,16 +1,15 @@
 package com.appointment_scheduling.model.entities;
 
 import java.util.Calendar;
+import java.util.Date;
 
 public class Appointment {
     User user;
-    Calendar date;
-    Calendar time;
+    Date date;
 
-    public Appointment(User user, Calendar date, Calendar time) {
+    public Appointment(User user, Date date) {
         this.user = user;
         this.date = date;
-        this.time = time;
     }
 
     public User getUser() {
@@ -21,19 +20,12 @@ public class Appointment {
         this.user = user;
     }
 
-    public Calendar getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(Calendar date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
-    public Calendar getTime() {
-        return time;
-    }
-
-    public void setTime(Calendar time) {
-        this.time = time;
-    }
 }

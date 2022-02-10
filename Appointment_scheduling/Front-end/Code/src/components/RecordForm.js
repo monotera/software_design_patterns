@@ -19,7 +19,7 @@ const RecordForm = (props) => {
   const [lastNames, setLastNames] = useState("LastName1 LastName2");
   const [age, setAge] = useState(0);
   const [date, setDate] = useState("1/1/2022");
-  const [time, setTime] = useState("10:00PM");
+  const [time, setTime] = useState("10:00");
   const handleIdChange = (e) => setId(e.target.value);
   const handleNamesChange = (e) => setNames(e.target.value);
   const handleLastNamesChange = (e) => setLastNames(e.target.value);
@@ -28,14 +28,16 @@ const RecordForm = (props) => {
   const handleTimeChange = (e) => setTime(e.target.value);
 
   appointment.user.id = id;
-  appointment.user.names = names;
-  appointment.user.lastNames = lastNames;
+  appointment.user.name = names;
+  appointment.user.lastName = lastNames;
   appointment.user.age = age;
   appointment.date = date;
-
   const send_info = async () => {
     appointment.date += `T${time}`;
-    props.create_appointment(appointment);
+    console.log(appointment.date);
+    await props.create_appointment(appointment);
+    alert("Cita creada");
+    window.location.reload(false);
   };
 
   return (
@@ -92,7 +94,7 @@ const RecordForm = (props) => {
               <Form.Group>
                 <Form.Label>Hora</Form.Label>
                 <Form.Control
-                  type="time"
+                  type="text"
                   placeholder="Ingresa la hora para agendar"
                   onChange={handleTimeChange}
                 />
