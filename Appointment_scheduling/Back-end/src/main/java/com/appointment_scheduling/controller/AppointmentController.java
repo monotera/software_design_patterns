@@ -108,6 +108,30 @@ public class AppointmentController {
         return new ResponseEntity(appointmentJson, null, HttpStatus.OK);
     }
 
+    @GetMapping("/appointment")
+    public ResponseEntity<ArrayList<Appointment>> fetch_appointments_by_date(@RequestParam String date) throws IOException {
+        // TODO: funcion que retorna las citas de una fecha (ArrayList<Appointment>)
+        //ArrayList<Appointment> appointmentsOfADay= new ArrayList<Appointment>(){};
+        String dateDirectory=date(date);
+        dateDirectory="src/main/java/com/appointment_scheduling/controller/"+dateDirectory;
+        File directory = new File(dateDirectory);
+        JsonReader dataAppointment;
+        Gson g = new Gson();
+        Type appointmentListType = new TypeToken<ArrayList<Appointment>>() {
+        }.getType();
+        ArrayList<Appointment>appointmentsOfADay = null;
+        if(!directory.exists()){
+            return new ResponseEntity<>(null, null, HttpStatus.OK);
+        }else{
+            File folder=new File(dateDirectory);
+            for (File file : folder.listFiles()) {
+                dataAppointment=new JsonReader((new FileReader(file+".json")));
+                appointmentsOfADay=g.fromJson(dataAppointment,appointmentListType);
+            }
+            return new ResponseEntity<>(appointmentsOfADay, null, HttpStatus.OK);
+        }
+    }
+
     /*@GetMapping("/appointment")
     public ResponseEntity<ArrayList<Appointment>> fetch_appointments_by_date(@RequestParam String date) throws IOException {
         // TODO: funcion que retorna las citas de una fecha (ArrayList<Appointment>)
@@ -136,29 +160,5 @@ public class AppointmentController {
             return new ResponseEntity<>(appointmentsOfADay, null, HttpStatus.OK);
         }
     }*/
-
-    @GetMapping("/appointment")
-    public ResponseEntity<ArrayList<Appointment>> fetch_appointments_by_date(@RequestParam String date) throws IOException {
-        // TODO: funcion que retorna las citas de una fecha (ArrayList<Appointment>)
-        //ArrayList<Appointment> appointmentsOfADay= new ArrayList<Appointment>(){};
-        String dateDirectory=date(date);
-        dateDirectory="./"+dateDirectory;
-        File directory = new File(dateDirectory);
-        JsonReader dataAppointment;
-        Gson g = new Gson();
-        Type appointmentListType = new TypeToken<ArrayList<Appointment>>() {
-        }.getType();
-        ArrayList<Appointment>appointmentsOfADay = null;
-        if(!directory.exists()){
-            return new ResponseEntity<>(null, null, HttpStatus.OK);
-        }else{
-            File folder=new File(dateDirectory);
-            for (File file : folder.listFiles()) {
-                dataAppointment=new JsonReader((new FileReader(file+".json")));
-                appointmentsOfADay=g.fromJson(dataAppointment,appointmentListType);
-            }
-            return new ResponseEntity<>(appointmentsOfADay, null, HttpStatus.OK);
-        }
-    }
 
 }
