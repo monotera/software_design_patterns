@@ -1,7 +1,6 @@
-package com.appointment_scheduling.model;
-import java.util.Calendar;
+package com.appointment_scheduling.model.entities;
 
-import com.appointment_scheduling.model.entities.User;
+import java.util.Calendar;
 
 public class Appointment {
     User user;
