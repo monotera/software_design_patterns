@@ -1,0 +1,16 @@
+{
+  "user": {
+    "name": "NElsono",
+    "lastName": "mos",
+    "age": 15,
+    "id": "1567"
+  },
+  "date": {
+    "year": 2012,
+    "month": 5,
+    "dayOfMonth": 6,
+    "hourOfDay": 12,
+    "minute": 0,
+    "second": 0
+  }
+}

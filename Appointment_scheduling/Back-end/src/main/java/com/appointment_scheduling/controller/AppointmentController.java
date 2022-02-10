@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
+import com.appointment_scheduling.model.db.Persister;
 import com.appointment_scheduling.model.entities.Appointment;
 import com.appointment_scheduling.model.entities.User;
 import java.text.SimpleDateFormat;
@@ -27,53 +28,12 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin(value = "http://localhost:3000")
 public class AppointmentController {
 
-    /*
-     * public boolean createDirectrory(){
-     * File directory = new File(
-     * "Appointment_scheduling/Back-end/src/main/java/com/appointment_scheduling/controller/AppointmentDirectory"
-     * );
-     * if(!directory.exists()){
-     * if(directory.mkdir()){
-     * return true;
-     * }else{
-     * return false;
-     * }
-     * }
-     * }
-     */
-
-    public boolean existsDirectory(String path) {
-        File directory = new File(path);
-        if (!directory.exists()) {
-            return directory.mkdir();
-        } else {
-            return false;
-        }
-    }
-
-    public String date(String date) {
-        String div[] = date.split("/");
-        String year = div[0];
-        String month = div[1];
-        String day = div[2];
-        String directoryName = year + month + day;
-        return directoryName;
-    }
-
-    public void saveJson(String appointment, String fileName, String directory) {
-        try {
-            FileWriter file = new FileWriter(directory + "./" + fileName);
-            file.write(appointment);
-            file.flush();
-            file.close();
-
-        } catch (IOException e) {
-            e.fillInStackTrace();
-        }
-    }
+    Persister persister = new Persister();
 
     @PostMapping("/appointment")
-    public ResponseEntity<Boolean> create_appointment(@RequestBody Appointment newAppointment) {
+    public ResponseEntity<Appointment> create_appointment(@RequestBody Appointment newAppointment) {
+
+        persister.write_data(newAppointment);
         // TODO: funcion para crear cita, se debe retornar un booleano
         // cambiar el primer null por lo que debe de retornar
         /*
@@ -93,7 +53,7 @@ public class AppointmentController {
          * saveJson(appointmentJson,filename, "./"+directoryName);
          * }
          */
-        return new ResponseEntity<>(null, null, HttpStatus.OK);
+        return new ResponseEntity<>(newAppointment, null, HttpStatus.OK);
     }
 
     @GetMapping("/appointment")
@@ -126,5 +86,35 @@ public class AppointmentController {
         // Cambiar el primer null por lo que debe retornar
         // ARREGLAR LO QUE SE DEBE RETORNAR
         return new ResponseEntity<>(null, null, HttpStatus.OK);
+    }
+
+    public boolean existsDirectory(String path) {
+        File directory = new File(path);
+        if (!directory.exists()) {
+            return directory.mkdir();
+        } else {
+            return false;
+        }
+    }
+
+    public String date(String date) {
+        String div[] = date.split("/");
+        String year = div[0];
+        String month = div[1];
+        String day = div[2];
+        String directoryName = year + month + day;
+        return directoryName;
+    }
+
+    public void saveJson(String appointment, String fileName, String directory) {
+        try {
+            FileWriter file = new FileWriter(directory + "./" + fileName);
+            file.write(appointment);
+            file.flush();
+            file.close();
+
+        } catch (IOException e) {
+            e.fillInStackTrace();
+        }
     }
 }
