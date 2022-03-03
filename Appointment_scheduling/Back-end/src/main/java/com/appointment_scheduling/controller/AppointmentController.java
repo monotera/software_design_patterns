@@ -1,18 +1,12 @@
 package com.appointment_scheduling.controller;
 
-import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 
-import com.appointment_scheduling.model.db.Persister;
-import com.appointment_scheduling.model.entities.Appointment;
-import com.appointment_scheduling.model.entities.User;
-import java.text.SimpleDateFormat;
+import com.appointment_scheduling.model.Appointment;
 
-import com.google.gson.Gson;
-import org.apache.tomcat.util.json.JSONParser;
+import com.appointment_scheduling.repository.AppointmentRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -27,21 +21,23 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/")
 @CrossOrigin(value = "http://localhost:3000")
 public class AppointmentController {
+//    @Autowired
+//    Environment env;
 
-    Persister persister = new Persister();
+    @Autowired
+    private AppointmentRepository repo;
 
     @PostMapping("/appointment")
     public ResponseEntity<Appointment> create_appointment(@RequestBody Appointment newAppointment) {
-        Boolean valid = persister.write_data(newAppointment);
-        if (!valid)
+        if (repo.save(new Appointment(newAppointment.getUserId(), newAppointment.getDate(), newAppointment.getId())) == null)
             return new ResponseEntity<>(null, null, HttpStatus.INTERNAL_SERVER_ERROR);
         return new ResponseEntity<>(newAppointment, null, HttpStatus.OK);
     }
 
     @GetMapping("/appointment")
     public ResponseEntity<ArrayList<Appointment>> fetch_appointments_by_date(@RequestParam String date) {
-        ArrayList<Appointment> response = persister.retrieveData(date);
+        ArrayList<Appointment> response = new ArrayList<>();
+        repo.findAll().forEach((a) -> response.add(a));
         return new ResponseEntity<>(response, null, HttpStatus.OK);
     }
-
 }
