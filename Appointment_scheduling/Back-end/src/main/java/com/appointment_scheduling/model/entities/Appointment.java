@@ -3,7 +3,11 @@ package com.appointment_scheduling.model.entities;
 import java.util.Calendar;
 import java.util.Date;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 public class Appointment {
+ 
     User user;
     Date date;
 
