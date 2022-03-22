@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"dao"},{"l":"entidades"},{"l":"implementacion"},{"l":"patronfactorymethod"},{"l":"utilidades"}];updateSearchResults();
