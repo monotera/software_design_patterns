@@ -1,0 +1,14 @@
+fintech\a\FintechARecepcionCredito.class
+implementacion\AdaptadorFitechB.class
+fintech\b\FintechBCreditosAPI.class
+implementacion\InterfaceFintechAdaptador.class
+fintech\a\FintechARecepcionCredito$1.class
+fintech\a\FintechAResultadoAprobacion.class
+implementacion\FintechSolicitudCredito.class
+implementacion\FintechCreditoRespuesta.class
+fintech\b\FintechBSolicitudCredito.class
+fintech\a\IntFintechARecepcionCredito.class
+fintech\b\FintechBRespuestaCredito.class
+patronadapter\PatronAdapterMain.class
+fintech\a\FintechACreditos.class
+implementacion\AdaptadorFintechA.class
