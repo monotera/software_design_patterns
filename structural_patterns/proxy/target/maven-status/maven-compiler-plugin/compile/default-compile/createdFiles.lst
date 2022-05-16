@@ -1,0 +1,8 @@
+implementacion\patronproxy.class
+implementacion\ProcesoDefecto.class
+servicios\Seguridad.class
+servicios\Auditoria.class
+implementacion\FabricaServicios.class
+implementacion\InterfaceProcesos.class
+implementacion\ProxyProcesos.class
+implementacion\ProxyValidacion.class
