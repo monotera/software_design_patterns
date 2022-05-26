@@ -1,0 +1,14 @@
+[
+    {
+        "_id": "I0",
+        "name": "NelsonLocal",
+        "description": "Lorem ipsum ...",
+        "age": 25
+    },
+    {
+        "_id": "I1",
+        "name": "JackLocal",
+        "description": "Lorem ipsum ...",
+        "age": 25
+    }
+]
