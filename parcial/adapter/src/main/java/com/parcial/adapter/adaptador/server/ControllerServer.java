@@ -14,7 +14,7 @@ public class ControllerServer {
         User[] response = restTemplate.getForObject(fooResourceUrl, User[].class);
         List<User> users = Arrays.asList(response);
         for (User u : users) {
-            if (u.get_id().equals(_id))
+            if (u.getCedula().equals(_id))
                 return u;
         }
         return null;

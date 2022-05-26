@@ -28,7 +28,7 @@ public class ControllerLocal {
             reader.close();
             List<User> users = Arrays.asList(user);
             for (User u : users) {
-                if (u.get_id().equals(_id))
+                if (u.getCedula().equals(_id))
                     return u;
             }
         } catch (Exception ex) {
